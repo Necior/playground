@@ -1,7 +1,9 @@
 use std::io::{self, BufRead};
 
 fn day01() {
-    let nums: Vec<i32> = io::stdin().lock().lines()
+    let nums: Vec<i32> = io::stdin()
+        .lock()
+        .lines()
         .map(|line| line.unwrap())
         .map(|line| line.parse().unwrap())
         .collect();
