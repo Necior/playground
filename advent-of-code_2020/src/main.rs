@@ -75,6 +75,7 @@ fn day02() {
     println!("# of valid passwords (Part Two): {}", counter_b);
 }
 
+#[allow(dead_code)]
 fn day03() {
     fn is_tree(line: &String, line_number: usize, right: usize, down: usize) -> bool {
         if (line_number + 1) % down != 0 {
@@ -99,7 +100,7 @@ fn day03() {
         }
     }
     println!("Part One: {}", encountered_trees[1]);
-    let total: u128 = encountered_trees.iter().fold(1, |acc, x| acc * x);
+    let total: u128 = encountered_trees.iter().product();
     println!("Part Two: {}", total);
 }
 
