@@ -32,6 +32,7 @@ fn day01() {
     }
 }
 
+#[allow(dead_code)]
 fn day02() {
     let mut counter_a = 0;
     let mut counter_b = 0;
@@ -74,6 +75,34 @@ fn day02() {
     println!("# of valid passwords (Part Two): {}", counter_b);
 }
 
+fn day03() {
+    fn is_tree(line: &String, line_number: usize, right: usize, down: usize) -> bool {
+        if (line_number + 1) % down != 0 {
+            return false;
+        }
+        let index = (right * (line_number / down + 1)) % line.len();
+        line.chars().nth(index).unwrap() == '#'
+    }
+
+    let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+    let mut encountered_trees = [0; 5];
+
+    for (line_no, line) in io::stdin().lock().lines().enumerate() {
+        if line_no == 0 {
+            continue;
+        }
+        let line = line.unwrap();
+        for i in 0..encountered_trees.len() {
+            if is_tree(&line, line_no - 1, slopes[i].0, slopes[i].1) {
+                encountered_trees[i] += 1;
+            }
+        }
+    }
+    println!("Part One: {}", encountered_trees[1]);
+    let total: u128 = encountered_trees.iter().fold(1, |acc, x| acc * x);
+    println!("Part Two: {}", total);
+}
+
 fn main() {
-    day02();
+    day03();
 }
