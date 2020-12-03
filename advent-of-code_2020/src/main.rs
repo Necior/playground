@@ -48,7 +48,7 @@ fn day02() {
         // e.g.: "1-3 a: abcde"
         let min = from_to[0]; // e.g. 1
         let max = from_to[1]; // e.g. 3
-        let letter = v[1].chars().nth(0).unwrap(); // e.g. 'a'
+        let letter = v[1].chars().next().unwrap(); // e.g. 'a'
         let password = v[2]; // e.g. "abcde"
 
         let count: u32 = password
