@@ -77,7 +77,7 @@ fn day02() {
 
 #[allow(dead_code)]
 fn day03() {
-    fn is_tree(line: &String, line_number: usize, right: usize, down: usize) -> bool {
+    fn is_tree(line: &str, line_number: usize, right: usize, down: usize) -> bool {
         if (line_number + 1) % down != 0 {
             return false;
         }
