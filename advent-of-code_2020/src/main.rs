@@ -1,5 +1,6 @@
+use std::collections::HashMap;
 use std::convert::TryInto;
-use std::io::{self, BufRead};
+use std::io::{self, BufRead, Read};
 
 #[allow(dead_code)]
 fn day01() {
@@ -104,6 +105,114 @@ fn day03() {
     println!("Part Two: {}", total);
 }
 
+fn day04() {
+    pub mod validators {
+        use std::collections::HashMap;
+
+        pub enum ValidationResult {
+            EverythingOk,
+            MissingFields,
+            InvalidFields,
+        }
+
+        fn byr(value: &str) -> bool {
+            // four digits; at least 1920 and at most 2002.
+            let year: u16 = value.parse().unwrap();
+            1920 <= year && year <= 2002
+        }
+
+        fn iyr(value: &str) -> bool {
+            // four digits; at least 2010 and at most 2020.
+            let year: u16 = value.parse().unwrap();
+            2010 <= year && year <= 2020
+        }
+
+        fn eyr(value: &str) -> bool {
+            // four digits; at least 2020 and at most 2030.
+            let year: u16 = value.parse().unwrap();
+            2020 <= year && year <= 2030
+        }
+
+        fn hgt(value: &str) -> bool {
+            // a number followed by either cm or in:
+            //
+            //     If cm, the number must be at least 150 and at most 193.
+            //     If in, the number must be at least 59 and at most 76.
+            if value.ends_with("cm") && value.len() >= 5 {
+                let height: u8 = value[0..3].parse().unwrap();
+                150 <= height && height <= 193
+            } else if value.ends_with("in") && value.len() >= 4 {
+                let height: u8 = value[0..2].parse().unwrap();
+                59 <= height && height <= 76
+            } else {
+                false
+            }
+        }
+
+        fn hcl(value: &str) -> bool {
+            // a # followed by exactly six characters 0-9 or a-f.
+            value.starts_with('#')
+                && value.len() == 7
+                && u32::from_str_radix(&value[1..7], 16).is_ok()
+        }
+
+        fn ecl(value: &str) -> bool {
+            // exactly one of: amb blu brn gry grn hzl oth.
+            ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].contains(&value)
+        }
+
+        fn pid(value: &str) -> bool {
+            // a nine-digit number, including leading zeroes.
+            value.len() == 9 && value.parse::<u32>().is_ok()
+        }
+
+        pub fn validate_fields(fields: HashMap<&str, &str>) -> ValidationResult {
+            let mandatory_fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
+            let validators = [byr, iyr, eyr, hgt, hcl, ecl, pid];
+            for field in mandatory_fields.iter() {
+                if !fields.contains_key(field) {
+                    return ValidationResult::MissingFields;
+                }
+            }
+            for (i, validator) in validators.iter().enumerate() {
+                if !validator(fields.get(mandatory_fields[i]).unwrap()) {
+                    return ValidationResult::InvalidFields;
+                }
+            }
+            ValidationResult::EverythingOk
+        }
+    }
+
+    let mut buffer = String::new();
+    io::stdin().lock().read_to_string(&mut buffer).unwrap();
+    let raw_passports = buffer.split("\n\n");
+
+    let mut passports_with_required_fields = 0;
+    let mut passports_with_valid_fields = 0;
+
+    for raw_passport in raw_passports {
+        let mut fields: HashMap<&str, &str> = HashMap::new();
+        for mut splitter in raw_passport.split_whitespace().map(|f| f.splitn(2, ':')) {
+            let field = splitter.next().unwrap();
+            let value = splitter.next().unwrap();
+            fields.insert(field, value);
+        }
+        match validators::validate_fields(fields) {
+            validators::ValidationResult::EverythingOk => {
+                passports_with_valid_fields += 1;
+                passports_with_required_fields += 1;
+            }
+            validators::ValidationResult::MissingFields => {
+                // Don't increment any counter
+            }
+            validators::ValidationResult::InvalidFields => passports_with_required_fields += 1,
+        };
+    }
+
+    println!("Part One: {}", passports_with_required_fields);
+    println!("Part Two: {}", passports_with_valid_fields);
+}
+
 fn main() {
-    day03();
+    day04();
 }
