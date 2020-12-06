@@ -105,6 +105,7 @@ fn day03() {
     println!("Part Two: {}", total);
 }
 
+#[allow(dead_code)]
 fn day04() {
     pub mod validators {
         use std::collections::HashMap;
@@ -213,6 +214,74 @@ fn day04() {
     println!("Part Two: {}", passports_with_valid_fields);
 }
 
+fn day05() {
+    #[derive(Clone)]
+    enum Half {
+        Lower,
+        Upper,
+    }
+    struct Line {
+        binary_row: Vec<Half>,
+        binary_col: Vec<Half>,
+    }
+    struct Seat {
+        row: u16,
+        col: u16,
+    }
+
+    impl Seat {
+        fn get_id(&self) -> u16 {
+            self.row * 8 + self.col
+        }
+    }
+    fn bisect(mut min: u16, mut max: u16, halves: Vec<Half>) -> u16 {
+        for half in halves {
+            let lm = match half {
+                Half::Lower => (min, max - (max - min) / 2 - 1),
+                Half::Upper => (min + (max - min) / 2 + 1, max),
+            };
+            min = lm.0;
+            max = lm.1;
+        }
+        assert_eq!(min, max);
+        min
+    }
+    fn parse_line(line: &str) -> Line {
+        // e.g.: "FBFBBFFRLR"
+        assert_eq!(line.len(), 10);
+        let halves: Vec<_> = line
+            .chars()
+            .map(|c| match c {
+                'F' => Half::Lower,
+                'L' => Half::Lower,
+                'B' => Half::Upper,
+                'R' => Half::Upper,
+                _ => unreachable!("unexpected input"),
+            })
+            .collect();
+        let (br, bc) = halves.split_at(7);
+        Line {
+            binary_row: br.into(),
+            binary_col: bc.into(),
+        }
+    }
+    fn get_seat(line: &str) -> Seat {
+        let parsed = parse_line(line);
+        Seat {
+            row: bisect(0, 127, parsed.binary_row),
+            col: bisect(0, 7, parsed.binary_col),
+        }
+    }
+
+    let highest_seat_id = io::stdin()
+        .lock()
+        .lines()
+        .map(|line| get_seat(&line.unwrap()).get_id())
+        .max()
+        .unwrap();
+    println!("Part One: {}", highest_seat_id);
+}
+
 fn main() {
-    day04();
+    day05();
 }
