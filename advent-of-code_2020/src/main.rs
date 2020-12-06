@@ -273,13 +273,23 @@ fn day05() {
         }
     }
 
-    let highest_seat_id = io::stdin()
+    let seat_ids: Vec<_> = io::stdin()
         .lock()
         .lines()
         .map(|line| get_seat(&line.unwrap()).get_id())
-        .max()
-        .unwrap();
-    println!("Part One: {}", highest_seat_id);
+        .collect();
+
+    let min_seat_id = *seat_ids.iter().min().unwrap();
+    let max_seat_id = *seat_ids.iter().max().unwrap();
+
+    println!("Part One: {}", max_seat_id);
+
+    for seat_id in min_seat_id..max_seat_id {
+        if !seat_ids.contains(&seat_id) {
+            println!("Part Two: {}", seat_id);
+            break;
+        }
+    }
 }
 
 fn main() {
