@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::convert::TryInto;
 use std::io::{self, BufRead, Read};
 
@@ -214,6 +214,7 @@ fn day04() {
     println!("Part Two: {}", passports_with_valid_fields);
 }
 
+#[allow(dead_code)]
 fn day05() {
     #[derive(Clone)]
     enum Half {
@@ -292,6 +293,35 @@ fn day05() {
     }
 }
 
+fn day06() {
+    struct Group<'a> {
+        answers: Vec<&'a str>,
+    }
+
+    impl<'a> Group<'a> {
+        fn unique_chars(&self) -> usize {
+            let mut chars = HashSet::new();
+            for a in &self.answers {
+                for char in a.chars() {
+                    chars.insert(char);
+                }
+            }
+            chars.len()
+        }
+    }
+    let mut buffer = String::new();
+    io::stdin().lock().read_to_string(&mut buffer).unwrap();
+    let unparsed_groups: Vec<_> = buffer.split("\n\n").collect();
+    let groups: Vec<Group> = unparsed_groups
+        .iter()
+        .map(|b| b.split('\n').collect())
+        .map(|g| Group { answers: g })
+        .collect();
+
+    let part_one: usize = groups.iter().map(|g| g.unique_chars()).sum();
+    println!("Part One: {}", part_one);
+}
+
 fn main() {
-    day05();
+    day06();
 }
