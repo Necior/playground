@@ -308,10 +308,33 @@ fn day06() {
             }
             chars.len()
         }
+
+        fn common_chars(&self) -> usize {
+            let sets: Vec<_> = self
+                .answers
+                .iter()
+                .map(|a| {
+                    let mut hs = HashSet::new();
+                    for c in a.chars() {
+                        hs.insert(c);
+                    }
+                    hs
+                })
+                .collect();
+            let mut common = sets[0].clone();
+            for s in sets[1..].iter() {
+                for c in &sets[0] {
+                    if !s.contains(c) {
+                        common.remove(c);
+                    }
+                }
+            }
+            common.len()
+        }
     }
     let mut buffer = String::new();
     io::stdin().lock().read_to_string(&mut buffer).unwrap();
-    let unparsed_groups: Vec<_> = buffer.split("\n\n").collect();
+    let unparsed_groups: Vec<_> = buffer.trim().split("\n\n").collect();
     let groups: Vec<Group> = unparsed_groups
         .iter()
         .map(|b| b.split('\n').collect())
@@ -320,6 +343,9 @@ fn day06() {
 
     let part_one: usize = groups.iter().map(|g| g.unique_chars()).sum();
     println!("Part One: {}", part_one);
+
+    let part_two: usize = groups.iter().map(|g| g.common_chars()).sum();
+    println!("Part Two: {}", part_two);
 }
 
 fn main() {
