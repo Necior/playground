@@ -2,4 +2,4 @@
 
 How similar (syntax-wise) can Rust and Python be?
 
-Please see `src/main.rs` for now.
+Please see [`src/main.rs`](src/main.rs) for now.
