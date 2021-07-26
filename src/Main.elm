@@ -57,10 +57,17 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ h1 [] [ text "Simple Todo App" ]
-        , input [ onInput MessageChanged, value model.currentTodo ] []
-        , button [ onClick AddTodo ] [ text "Add todo" ]
-        , h2 [] [ text "Todo" ]
-        , ul []
-            (List.map (\todo -> li [] [ text todo ]) model.todos)
-        ]
+        ([ h1 [] [ text "Simple Todo App" ]
+         , input [ onInput MessageChanged, value model.currentTodo ] []
+         , button [ onClick AddTodo ] [ text "Add todo" ]
+         ]
+            ++ viewTodos model
+        )
+
+
+viewTodos : Model -> List (Html Msg)
+viewTodos model =
+    [ h2 [] [ text "Todo" ]
+    , ul []
+        (List.map (\todo -> li [] [ text todo ]) model.todos)
+    ]
