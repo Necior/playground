@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, input, p, text)
+import Html exposing (Html, button, div, h1, h2, input, li, text, ul)
 import Html.Attributes exposing (value)
 import Html.Events exposing (onClick, onInput)
 
@@ -57,8 +57,10 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ input [ onInput MessageChanged, value model.currentTodo ] []
+        [ h1 [] [ text "Simple Todo App" ]
+        , input [ onInput MessageChanged, value model.currentTodo ] []
         , button [ onClick AddTodo ] [ text "Add todo" ]
-        , div []
-            (List.map (\todo -> p [] [ text todo ]) model.todos)
+        , h2 [] [ text "Todo" ]
+        , ul []
+            (List.map (\todo -> li [] [ text todo ]) model.todos)
         ]
