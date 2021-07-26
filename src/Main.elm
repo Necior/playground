@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, h1, h2, input, li, text, ul)
+import Html exposing (Html, button, div, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (value)
 import Html.Events exposing (onClick, onInput)
 
@@ -68,6 +68,10 @@ view model =
 viewTodos : Model -> List (Html Msg)
 viewTodos model =
     [ h2 [] [ text "Todo" ]
-    , ul []
-        (List.map (\todo -> li [] [ text todo ]) model.todos)
+    , if List.length model.todos > 0 then
+        ul []
+            (List.map (\todo -> li [] [ text todo ]) model.todos)
+
+      else
+        small [] [ text "Hooray! Everything's done :-)" ]
     ]
