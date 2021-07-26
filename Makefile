@@ -5,3 +5,7 @@ index.html: src/Main.elm
 format: src/Main.elm
 	elm-format --yes src/Main.elm
 
+.PHONY: develop
+develop:
+	elm reactor
+
