@@ -4,6 +4,7 @@ import Browser
 import Html exposing (Html, button, div, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (value)
 import Html.Events exposing (onClick, onInput)
+import Set exposing (Set)
 
 
 
@@ -20,14 +21,14 @@ main =
 
 type alias Model =
     { currentTodo : String
-    , todos : List String
+    , todos : Set String
     }
 
 
 init : Model
 init =
     { currentTodo = ""
-    , todos = []
+    , todos = Set.empty
     }
 
 
@@ -47,7 +48,7 @@ update msg model =
             { model | currentTodo = t }
 
         AddTodo ->
-            { model | currentTodo = "", todos = model.todos ++ [ model.currentTodo ] }
+            { model | currentTodo = "", todos = Set.insert model.currentTodo model.todos }
 
 
 
@@ -68,9 +69,9 @@ view model =
 viewTodos : Model -> List (Html Msg)
 viewTodos model =
     [ h2 [] [ text "Todo" ]
-    , if List.length model.todos > 0 then
+    , if Set.size model.todos > 0 then
         ul []
-            (List.map (\todo -> li [] [ text todo ]) model.todos)
+            (List.map (\todo -> li [] [ text todo, text " " ]) (Set.toList model.todos))
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
