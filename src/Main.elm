@@ -39,6 +39,7 @@ init =
 type Msg
     = MessageChanged String
     | AddTodo
+    | MarkAsDone String
 
 
 update : Msg -> Model -> Model
@@ -49,6 +50,9 @@ update msg model =
 
         AddTodo ->
             { model | currentTodo = "", todos = Set.insert model.currentTodo model.todos }
+
+        MarkAsDone t ->
+            { model | todos = Set.remove t model.todos }
 
 
 
@@ -71,7 +75,7 @@ viewTodos model =
     [ h2 [] [ text "Todo" ]
     , if Set.size model.todos > 0 then
         ul []
-            (List.map (\todo -> li [] [ text todo, text " " ]) (Set.toList model.todos))
+            (List.map (\todo -> li [] [ text todo, text " ", button [ onClick (MarkAsDone todo) ] [ text "Done" ] ]) (Set.toList model.todos))
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
