@@ -75,7 +75,7 @@ viewTodos model =
     [ h2 [] [ text "Todo" ]
     , if Set.size model.todos > 0 then
         ul []
-            (List.map (\todo -> li [] [ text todo, text " ", button [ onClick (MarkAsDone todo) ] [ text "Done" ] ]) (Set.toList model.todos))
+            (List.map (\todo -> li [] [ button [ onClick (MarkAsDone todo) ] [ text "Done" ], text (" " ++ todo) ]) (Set.toList model.todos))
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
