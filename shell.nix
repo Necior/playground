@@ -3,7 +3,7 @@
 pkgs.mkShell {
   buildInputs = with pkgs; [
     python39
-    python39Packages.django
+    python39Packages.django_3
   ];
 }
 
