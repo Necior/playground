@@ -22,14 +22,14 @@ main =
 
 type alias Model =
     { currentTodo : String
-    , todos : Set String
+    , todos : List String
     }
 
 
 init : Model
 init =
     { currentTodo = ""
-    , todos = Set.empty
+    , todos = []
     }
 
 
@@ -50,10 +50,10 @@ update msg model =
             { model | currentTodo = t }
 
         AddTodo ->
-            { model | currentTodo = "", todos = Set.insert model.currentTodo model.todos }
+            { model | currentTodo = "", todos = model.currentTodo :: model.todos }
 
         MarkAsDone t ->
-            { model | todos = Set.remove t model.todos }
+            { model | todos = List.filter (\task -> task /= t) model.todos }
 
 
 
@@ -74,9 +74,9 @@ view model =
 viewTodos : Model -> List (Html Msg)
 viewTodos model =
     [ h2 [] [ text "Todo" ]
-    , if Set.size model.todos > 0 then
+    , if List.length model.todos > 0 then
         ul []
-            (List.map (\todo -> li [] [ button [ onClick (MarkAsDone todo) ] [ text "Done" ], text (" " ++ todo) ]) (Set.toList model.todos))
+            (List.map (\todo -> li [] [ button [ onClick (MarkAsDone todo) ] [ text "Done" ], text (" " ++ todo) ]) model.todos)
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
