@@ -5,7 +5,6 @@ import Html exposing (Attribute, Html, button, div, h1, h2, input, li, small, te
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode
-import Set exposing (Set)
 
 
 
