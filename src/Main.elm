@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Html exposing (Attribute, Html, button, div, h1, h2, input, li, small, text, ul)
-import Html.Attributes exposing (value)
+import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode
 import Set exposing (Set)
@@ -64,7 +64,7 @@ view : Model -> Html Msg
 view model =
     div []
         ([ h1 [] [ text "Simple Todo App" ]
-         , input [ onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
+         , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
          , button [ onClick AddTodo ] [ text "Add todo" ]
          ]
             ++ viewTodos model
