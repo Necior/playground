@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Attribute, Html, button, div, h1, h2, input, li, small, text, ul)
+import Html exposing (Attribute, Html, button, del, div, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode
@@ -22,6 +22,7 @@ main =
 type alias Model =
     { currentTodo : String
     , todos : List String
+    , done : List String
     }
 
 
@@ -29,6 +30,7 @@ init : Model
 init =
     { currentTodo = ""
     , todos = []
+    , done = []
     }
 
 
@@ -52,7 +54,10 @@ update msg model =
             { model | currentTodo = "", todos = model.currentTodo :: model.todos }
 
         MarkAsDone t ->
-            { model | todos = List.filter (\task -> task /= t) model.todos }
+            { model
+                | todos = List.filter (\task -> task /= t) model.todos
+                , done = List.append (List.filter (\task -> task == t) model.todos) model.done
+            }
 
 
 
@@ -79,6 +84,13 @@ viewTodos model =
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
+    , h2 [] [ text "Done" ]
+    , if List.length model.done > 0 then
+        ul []
+            (List.map (\todo -> li [] [ small [] [ del [] [ text todo ] ] ]) model.done)
+
+      else
+        small [] [ text "(finished tasks will appear here)" ]
     ]
 
 
