@@ -110,9 +110,22 @@ view model =
             ]
                 ++ viewTodos model
     in
-    { title = "Simple Todo App"
+    { title = title (List.length model.todos)
     , body = body
     }
+
+
+title : Int -> String
+title taskCount =
+    let
+        appName =
+            "Simple Todo App"
+    in
+    if taskCount == 0 then
+        appName
+
+    else
+        "(" ++ String.fromInt taskCount ++ ") " ++ appName
 
 
 viewTodos : Model -> List (Html Msg)
