@@ -51,7 +51,11 @@ update msg model =
             { model | currentTodo = t }
 
         AddTodo ->
-            { model | currentTodo = "", todos = model.currentTodo :: model.todos }
+            if model.currentTodo == "" then
+                model
+
+            else
+                { model | currentTodo = "", todos = model.currentTodo :: model.todos }
 
         MarkAsDone t ->
             { model
