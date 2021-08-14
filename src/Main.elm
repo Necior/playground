@@ -1,10 +1,12 @@
 module Main exposing (..)
 
 import Browser
+import Browser.Navigation as Nav
 import Html exposing (Attribute, Html, button, del, div, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode
+import Url
 
 
 
@@ -12,7 +14,14 @@ import Json.Decode
 
 
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.application
+        { init = init
+        , update = update
+        , view = view
+        , subscriptions = subscriptions
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
+        }
 
 
 
@@ -26,12 +35,14 @@ type alias Model =
     }
 
 
-init : Model
-init =
-    { currentTodo = ""
-    , todos = []
-    , done = []
-    }
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    ( { currentTodo = ""
+      , todos = []
+      , done = []
+      }
+    , Cmd.none
+    )
 
 
 
@@ -42,41 +53,66 @@ type Msg
     = MessageChanged String
     | AddTodo
     | MarkAsDone String
+    | UrlChanged Url.Url
+    | LinkClicked Browser.UrlRequest
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MessageChanged t ->
-            { model | currentTodo = t }
+            ( { model | currentTodo = t }, Cmd.none )
 
         AddTodo ->
             if model.currentTodo == "" then
-                model
+                ( model, Cmd.none )
 
             else
-                { model | currentTodo = "", todos = model.currentTodo :: model.todos }
+                ( { model | currentTodo = "", todos = model.currentTodo :: model.todos }
+                , Cmd.none
+                )
 
         MarkAsDone t ->
-            { model
+            ( { model
                 | todos = List.filter (\task -> task /= t) model.todos
                 , done = List.append (List.filter (\task -> task == t) model.todos) model.done
-            }
+              }
+            , Cmd.none
+            )
+
+        UrlChanged url ->
+            ( model, Cmd.none )
+
+        LinkClicked urlRequest ->
+            ( model, Cmd.none )
+
+
+
+-- SUBSCRIPTIONS
+
+
+subscriptions : Model -> Sub msg
+subscriptions model =
+    Sub.none
 
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    div []
-        ([ h1 [] [ text "Simple Todo App" ]
-         , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
-         , button [ onClick AddTodo ] [ text "Add todo" ]
-         ]
-            ++ viewTodos model
-        )
+    let
+        body =
+            [ h1 [] [ text "Simple Todo App" ]
+            , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
+            , button [ onClick AddTodo ] [ text "Add todo" ]
+            ]
+                ++ viewTodos model
+    in
+    { title = "Simple Todo App"
+    , body = body
+    }
 
 
 viewTodos : Model -> List (Html Msg)
