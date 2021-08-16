@@ -4,7 +4,7 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (Attribute, Html, button, del, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
-import Html.Events exposing (keyCode, on, onClick, onInput)
+import Html.Events exposing (keyCode, on, onClick, onInput, onMouseOut, onMouseOver)
 import Json.Decode
 import Url
 
@@ -32,6 +32,7 @@ type alias Model =
     { currentTodo : String
     , todos : List String
     , done : List String
+    , hovered : Maybe String
     }
 
 
@@ -40,6 +41,7 @@ init flags url key =
     ( { currentTodo = ""
       , todos = []
       , done = []
+      , hovered = Nothing
       }
     , Cmd.none
     )
@@ -55,6 +57,8 @@ type Msg
     | MarkAsDone String
     | UrlChanged Url.Url
     | LinkClicked Browser.UrlRequest
+    | MouseOver String
+    | MouseOut
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -85,6 +89,12 @@ update msg model =
 
         LinkClicked urlRequest ->
             ( model, Cmd.none )
+
+        MouseOver t ->
+            ( { model | hovered = Just t }, Cmd.none )
+
+        MouseOut ->
+            ( { model | hovered = Nothing }, Cmd.none )
 
 
 
@@ -133,7 +143,12 @@ viewTodos model =
     [ h2 [] [ text "Todo" ]
     , if List.length model.todos > 0 then
         ul []
-            (List.map (\todo -> li [] [ button [ onClick (MarkAsDone todo) ] [ text "Done" ], text (" " ++ todo) ]) model.todos)
+            (List.map
+                (\t ->
+                    viewTodo t (Just t == model.hovered)
+                )
+                model.todos
+            )
 
       else
         small [] [ text "Hooray! Everything's done :-)" ]
@@ -145,6 +160,18 @@ viewTodos model =
       else
         small [] [ text "(finished tasks will appear here)" ]
     ]
+
+
+viewTodo : String -> Bool -> Html Msg
+viewTodo todo hovered =
+    li [ onMouseOver (MouseOver todo), onMouseOut MouseOut, onClick (MarkAsDone todo) ]
+        [ case hovered of
+            True ->
+                del [] [ text todo ]
+
+            False ->
+                text todo
+        ]
 
 
 
