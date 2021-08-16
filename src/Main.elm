@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Attribute, Html, button, del, div, h1, h2, input, li, small, text, ul)
+import Html exposing (Attribute, Html, button, del, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput)
 import Json.Decode
