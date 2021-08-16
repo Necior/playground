@@ -165,12 +165,11 @@ viewTodos model =
 viewTodo : String -> Bool -> Html Msg
 viewTodo todo hovered =
     li [ onMouseOver (MouseOver todo), onMouseOut MouseOut, onClick (MarkAsDone todo) ]
-        [ case hovered of
-            True ->
-                del [] [ text todo ]
+        [ if hovered then
+            del [] [ text todo ]
 
-            False ->
-                text todo
+          else
+            text todo
         ]
 
 
