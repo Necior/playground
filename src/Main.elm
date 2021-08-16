@@ -91,7 +91,7 @@ update msg model =
 -- SUBSCRIPTIONS
 
 
-subscriptions : Model -> Sub msg
+subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
 
