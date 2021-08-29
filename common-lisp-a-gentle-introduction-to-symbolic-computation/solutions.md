@@ -106,3 +106,19 @@ No and yes, respectively.
 - (EVENP T)
 - (EVENP 2 2)
 
+# 2.1
+
+(solved on paper)
+
+# 2.2
+
+2, 5, 6
+
+# 2.3
+
+(solved on paper)
+
+# 2.4
+
+((BOWS ARROWS) (FLOWERS CHOCOLATES))
+
