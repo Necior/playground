@@ -158,7 +158,7 @@ viewTodos model =
             (List.map (\todo -> li [] [ small [] [ del [] [ text todo ] ] ]) model.done)
 
       else
-        small [] [ text "(finished tasks will appear here)" ]
+        small [] [ text "Get back to work! :-)" ]
     ]
 
 
