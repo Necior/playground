@@ -122,3 +122,27 @@ No and yes, respectively.
 
 ((BOWS ARROWS) (FLOWERS CHOCOLATES))
 
+# 4.1
+
+(defun make-even (n) (if (evenp n) n (+ n 1)))
+
+# 4.2
+
+(defun further (n) (if (< n 0) (- n 1) (+ n 1)))
+
+# 4.3
+
+(defun my-not (x) (if x nil t))
+
+# 4.4
+
+(defun ordered (x y) (if (< x y) (list x y) (list y x)))
+
+# 4.5
+
+3, 2, 1
+
+# 4.6
+
+(defun my-abs (x) (cond ((< x 0) (- x)) (t x)))
+
