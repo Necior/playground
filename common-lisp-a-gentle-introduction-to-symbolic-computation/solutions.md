@@ -122,6 +122,32 @@ No and yes, respectively.
 
 ((BOWS ARROWS) (FLOWERS CHOCOLATES))
 
+# 2.5
+
+6, 3, 4, 4, 5, 6
+
+# 2.6
+
+() => NIL
+(()) => (NIL)
+((())) => ((NIL))
+(() ()) => (NIL NIL)
+(() (())) => (NIL (NIL))
+
+# 2.7
+
+(HONK IF YOU LIKE GEESE)
+(IF YOU LIKE GEESE)
+IF
+
+# 2.8
+
+REST -> REST -> FIRST
+
+# 2.9
+
+REST -> SECOND
+
 # 4.1
 
 (defun make-even (n) (if (evenp n) n (+ n 1)))
