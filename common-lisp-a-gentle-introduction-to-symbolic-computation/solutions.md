@@ -150,19 +150,27 @@ REST -> SECOND
 
 # 4.1
 
+```common-lisp
 (defun make-even (n) (if (evenp n) n (+ n 1)))
+```
 
 # 4.2
 
+```common-lisp
 (defun further (n) (if (< n 0) (- n 1) (+ n 1)))
+```
 
 # 4.3
 
+```common-lisp
 (defun my-not (x) (if x nil t))
+```
 
 # 4.4
 
+```common-lisp
 (defun ordered (x y) (if (< x y) (list x y) (list y x)))
+```
 
 # 4.5
 
@@ -170,5 +178,7 @@ REST -> SECOND
 
 # 4.6
 
+```common-lisp
 (defun my-abs (x) (cond ((< x 0) (- x)) (t x)))
+```
 
