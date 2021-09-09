@@ -1,5 +1,6 @@
 module Color where
 
+import qualified Data.Map.Strict as Map
 import Data.Word
 
 data PolybarColorScheme = PolybarColorScheme
@@ -16,10 +17,18 @@ data RGB = RGB
   }
   deriving (Eq, Show)
 
-polybarColorScheme =
+newtype ThemeInstance = ThemeInstance {getThemeInstance :: Map.Map String RGB}
+
+myTheme =
+  ThemeInstance . Map.fromList $
+    [ ("foreground", RGB 0x3a 0x20 0x35),
+      ("background", RGB 0xdd 0xa0 0xdd)
+    ]
+
+polybarColorScheme :: ThemeInstance -> Maybe PolybarColorScheme
+polybarColorScheme (ThemeInstance theme) =
   PolybarColorScheme
-    { focusedWorkspaceText = RGB 0xdd 0xa0 0xdd,
-      focusedWorkspaceBackground = RGB 0x2a 0x20 0x35,
-      visibleWorkspaceText = RGB 0xdd 0xa0 0xdd,
-      visibleWorkspaceBackground = RGB 0x2a 0x20 0x35
-    }
+    <$> Map.lookup "foreground" theme
+    <*> Map.lookup "background" theme
+    <*> Map.lookup "foreground" theme
+    <*> Map.lookup "background" theme
