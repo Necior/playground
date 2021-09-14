@@ -19,14 +19,17 @@ main =
 init : () -> ( Model, Cmd Msg )
 init _ =
     let
+        minutes =
+            \s -> 60 * s
+
         work =
-            { step = Work, duration = 60 * 25 }
+            { step = Work, duration = 25 |> minutes }
 
         break =
-            { step = Break, duration = 60 * 5 }
+            { step = Break, duration = 5 |> minutes }
 
         longBreak =
-            { step = LongBreak, duration = 60 * 30 }
+            { step = LongBreak, duration = 30 |> minutes }
     in
     ( { pomodoro = [ work, break, work, break, work, break, work, longBreak ]
       , currentIndex = 0
