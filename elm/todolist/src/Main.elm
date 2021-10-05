@@ -72,7 +72,7 @@ update msg model =
                 ( model, Cmd.none )
 
             else
-                ( { model | currentTodo = "", todos = model.currentTodo :: model.todos }
+                ( { model | currentTodo = "", todos = model.todos ++ [ model.currentTodo ] }
                 , Cmd.none
                 )
 
