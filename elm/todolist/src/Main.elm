@@ -28,17 +28,22 @@ main =
 -- MODEL
 
 
+type alias Todo =
+    { title : String
+    }
+
+
 type alias Model =
-    { currentTodo : String
-    , todos : List String
-    , done : List String
-    , hovered : Maybe String
+    { currentTodo : Todo
+    , todos : List Todo
+    , done : List Todo
+    , hovered : Maybe Todo
     }
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { currentTodo = ""
+    ( { currentTodo = { title = "" }
       , todos = []
       , done = []
       , hovered = Nothing
@@ -54,10 +59,10 @@ init flags url key =
 type Msg
     = MessageChanged String
     | AddTodo
-    | MarkAsDone String
+    | MarkAsDone Todo
     | UrlChanged Url.Url
     | LinkClicked Browser.UrlRequest
-    | MouseOver String
+    | MouseOver Todo
     | MouseOut
 
 
@@ -65,14 +70,14 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MessageChanged t ->
-            ( { model | currentTodo = t }, Cmd.none )
+            ( { model | currentTodo = { title = t } }, Cmd.none )
 
         AddTodo ->
-            if model.currentTodo == "" then
+            if model.currentTodo.title == "" then
                 ( model, Cmd.none )
 
             else
-                ( { model | currentTodo = "", todos = model.todos ++ [ model.currentTodo ] }
+                ( { model | currentTodo = { title = "" }, todos = model.todos ++ [ model.currentTodo ] }
                 , Cmd.none
                 )
 
@@ -115,7 +120,7 @@ view model =
     let
         body =
             [ h1 [] [ text "Simple Todo App" ]
-            , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
+            , input [ autofocus True, onInput MessageChanged, value model.currentTodo.title, onEnter AddTodo ] []
             , button [ onClick AddTodo ] [ text "Add todo" ]
             ]
                 ++ viewTodos model
@@ -155,21 +160,21 @@ viewTodos model =
     , h2 [] [ text "Done" ]
     , if List.length model.done > 0 then
         ul []
-            (List.map (\todo -> li [] [ small [] [ del [] [ text todo ] ] ]) model.done)
+            (List.map (\todo -> li [] [ small [] [ del [] [ text todo.title ] ] ]) model.done)
 
       else
         small [] [ text "Get back to work! :-)" ]
     ]
 
 
-viewTodo : String -> Bool -> Html Msg
+viewTodo : Todo -> Bool -> Html Msg
 viewTodo todo hovered =
     li [ onMouseOver (MouseOver todo), onMouseOut MouseOut, onClick (MarkAsDone todo) ]
         [ if hovered then
-            del [] [ text todo ]
+            del [] [ text todo.title ]
 
           else
-            text todo
+            text todo.title
         ]
 
 
