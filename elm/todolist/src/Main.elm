@@ -34,7 +34,7 @@ type alias Todo =
 
 
 type alias Model =
-    { currentTodo : Todo
+    { currentTodo : String
     , todos : List Todo
     , done : List Todo
     , hovered : Maybe Todo
@@ -43,7 +43,7 @@ type alias Model =
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( { currentTodo = { title = "" }
+    ( { currentTodo = ""
       , todos = []
       , done = []
       , hovered = Nothing
@@ -70,14 +70,14 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         MessageChanged t ->
-            ( { model | currentTodo = { title = t } }, Cmd.none )
+            ( { model | currentTodo = t }, Cmd.none )
 
         AddTodo ->
-            if model.currentTodo.title == "" then
+            if model.currentTodo == "" then
                 ( model, Cmd.none )
 
             else
-                ( { model | currentTodo = { title = "" }, todos = model.todos ++ [ model.currentTodo ] }
+                ( { model | currentTodo = "", todos = model.todos ++ [ { title = model.currentTodo } ] }
                 , Cmd.none
                 )
 
@@ -120,7 +120,7 @@ view model =
     let
         body =
             [ h1 [] [ text "Simple Todo App" ]
-            , input [ autofocus True, onInput MessageChanged, value model.currentTodo.title, onEnter AddTodo ] []
+            , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
             , button [ onClick AddTodo ] [ text "Add todo" ]
             ]
                 ++ viewTodos model
