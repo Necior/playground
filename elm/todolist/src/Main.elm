@@ -2,10 +2,11 @@ module Main exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Attribute, Html, button, del, h1, h2, input, li, small, text, ul)
+import Html exposing (Attribute, Html, button, del, h1, h2, h3, input, li, pre, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput, onMouseOut, onMouseOver)
 import Json.Decode as D
+import Json.Encode as E
 import Url
 
 
@@ -124,6 +125,9 @@ view model =
             , button [ onClick AddTodo ] [ text "Add todo" ]
             ]
                 ++ viewTodos model
+                ++ [ h3 [] [ text "serialized" ]
+                   , pre [] [ text (E.encode 2 (encode model)) ]
+                   ]
     in
     { title = title (List.length model.todos)
     , body = body
@@ -176,6 +180,19 @@ viewTodo todo hovered =
           else
             text todo.title
         ]
+
+
+encode : Model -> E.Value
+encode model =
+    E.object
+        [ ( "todos", E.list encodeTodo model.todos )
+        , ( "done", E.list encodeTodo model.done )
+        ]
+
+
+encodeTodo : Todo -> E.Value
+encodeTodo todo =
+    E.object [ ( "title", E.string todo.title ) ]
 
 
 
