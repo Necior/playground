@@ -5,7 +5,7 @@ import Browser.Navigation as Nav
 import Html exposing (Attribute, Html, button, del, h1, h2, input, li, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput, onMouseOut, onMouseOver)
-import Json.Decode
+import Json.Decode as D
 import Url
 
 
@@ -188,9 +188,9 @@ onEnter msg =
     let
         isEnter code =
             if code == 13 then
-                Json.Decode.succeed msg
+                D.succeed msg
 
             else
-                Json.Decode.fail "not Enter"
+                D.fail "not Enter"
     in
-    on "keydown" (Json.Decode.andThen isEnter keyCode)
+    on "keydown" (D.andThen isEnter keyCode)
