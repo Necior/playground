@@ -20,7 +20,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     let
         minutes =
-            \s -> 60 * s
+            (*) 60
 
         work =
             { step = Work, duration = 25 |> minutes }
