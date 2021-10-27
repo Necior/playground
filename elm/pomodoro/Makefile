@@ -9,3 +9,7 @@ format: src/Main.elm
 develop:
 	elm reactor
 
+.PHONY:
+publish-dev-docker-image: index.html Dockerfile
+	docker buildx build --platform linux/arm64,linux/amd64 -t necior/elm-pomodoro:dev --push .
+
