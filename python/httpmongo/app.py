@@ -68,7 +68,7 @@ def form():
 <head><title>Terms</title></head>
 <body>
 <form action="term" method="POST">
-<input placeholder="term" name="term">
+<input placeholder="term" name="term" autofocus>
 <input placeholder="description" name="description">
 <button>submit</button>
 </form>
