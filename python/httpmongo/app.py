@@ -1,11 +1,28 @@
 from itertools import groupby
 import os
+from typing import List
 
 from flask import escape, Flask, redirect, request
 import pymongo
 
 
 app = Flask(__name__)
+
+
+class Definition:
+    def __init__(self, term: str, description: str):
+        self.description = description
+        self.term = term
+
+    def to_dict(self) -> dict:
+        return {
+            "description": self.description,
+            "term": self.term,
+        }
+
+    @staticmethod
+    def from_dict(d: dict) -> "Definition":
+        return Definition(d["term"], d["description"])
 
 
 class Repository:
@@ -15,29 +32,29 @@ class Repository:
             host, serverSelectionTimeoutMS=2000
         ).httpmongodb.httpmongocollection
 
-    def insert(self, doc):
-        self.collection.insert_one(doc)
+    def insert(self, definition: Definition) -> None:
+        self.collection.insert_one(definition.to_dict())
 
-    def get_all(self):
-        return [
-            {"term": i["term"], "description": i["description"]}
-            for i in self.collection.find()
-        ]
+    def get_all(self) -> List[Definition]:
+        return [Definition.from_dict(d) for d in self.collection.find()]
 
 
 repo = Repository()
 
 
 def view_terms():
-    key = lambda t: t["term"].lower()
-
     html = ""
-    for key, group in groupby(sorted(repo.get_all(), key=key), key=key):
-        html += f"<h4>{escape(key)}</h4>"
-        for term in group:
-            desc = term["description"]
+    for term, definitions in groupby(
+        sorted(
+            repo.get_all(),
+            key=lambda d: (d.term.lower(), d.term, d.description),
+        ),
+        key=lambda d: d.term,
+    ):
+        html += f"<h4>{escape(term)}</h4>"
+        for definition in definitions:
             html += "<ul>"
-            html += f"<li>{escape(desc)}</li>"
+            html += f"<li>{escape(definition.description)}</li>"
             html += "</ul>"
     html = html or "no terms yet"
     return html
@@ -64,9 +81,8 @@ def form():
 @app.route("/term", methods=["POST"])
 def insert_one():
     repo.insert(
-        {
-            "term": request.form["term"].strip(),
-            "description": request.form["description"].strip(),
-        }
+        Definition(
+            request.form["term"].strip(), request.form["description"].strip()
+        )
     )
     return redirect("/")
