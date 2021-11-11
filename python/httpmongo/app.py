@@ -1,6 +1,7 @@
+from itertools import groupby
 import os
 
-from flask import Flask, redirect, request
+from flask import escape, Flask, redirect, request
 import pymongo
 
 
@@ -19,7 +20,7 @@ class Repository:
 
     def get_all(self):
         return [
-            {"term": i["term"], "decription": i["description"]}
+            {"term": i["term"], "description": i["description"]}
             for i in self.collection.find()
         ]
 
@@ -27,29 +28,45 @@ class Repository:
 repo = Repository()
 
 
-@app.route("/terms")
-def get_all():
-    return {"all": repo.get_all()}
+def view_terms():
+    key = lambda t: t["term"]
+
+    html = ""
+    for key, group in groupby(sorted(repo.get_all(), key=key), key=key):
+        html += f"<h4>{escape(key)}</h4>"
+        for term in group:
+            desc = term["description"]
+            html += "<ul>"
+            html += f"<li>{escape(desc)}</li>"
+            html += "</ul>"
+    html = html or "no terms yet"
+    return html
 
 
 @app.route("/")
 def form():
-    return """<html>
+    return (
+        """<!DOCTYPE html>
+<html lang="en">
+<head><title>Terms</title></head>
 <body>
-<a href="terms">show all</a>
 <form action="term" method="POST">
 <input placeholder="term" name="term">
 <input placeholder="description" name="description">
 <button>submit</button>
+</form>
+<hr>
 """
+        + view_terms()
+    )
 
 
 @app.route("/term", methods=["POST"])
 def insert_one():
     repo.insert(
         {
-            "term": request.form["term"],
-            "description": request.form["description"],
+            "term": request.form["term"].strip(),
+            "description": request.form["description"].strip(),
         }
     )
     return redirect("/")
