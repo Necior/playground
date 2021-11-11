@@ -52,10 +52,10 @@ def view_terms():
         key=lambda d: d.term,
     ):
         html += f"<h4>{escape(term)}</h4>"
+        html += "<ul>"
         for definition in definitions:
-            html += "<ul>"
             html += f"<li>{escape(definition.description)}</li>"
-            html += "</ul>"
+        html += "</ul>"
     html = html or "no terms yet"
     return html
 
