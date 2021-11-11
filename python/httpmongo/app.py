@@ -29,7 +29,7 @@ repo = Repository()
 
 
 def view_terms():
-    key = lambda t: t["term"]
+    key = lambda t: t["term"].lower()
 
     html = ""
     for key, group in groupby(sorted(repo.get_all(), key=key), key=key):
