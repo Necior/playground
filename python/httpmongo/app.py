@@ -54,7 +54,8 @@ def view_terms():
         html += f"<h4>{escape(term)}</h4>"
         html += "<ul>"
         for definition in definitions:
-            html += f"<li>{escape(definition.description)}</li>"
+            desc = str(escape(definition.description)).replace("\n", "<br>")
+            html += f"<li>{desc}</li>"
         html += "</ul>"
     html = html or "no terms yet"
     return html
@@ -69,7 +70,7 @@ def form():
 <body>
 <form action="term" method="POST">
 <input placeholder="term" name="term" autofocus>
-<input placeholder="description" name="description">
+<textarea placeholder="description" name="description"></textarea>
 <button>submit</button>
 </form>
 <hr>
