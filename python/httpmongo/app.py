@@ -65,7 +65,14 @@ def form():
     return (
         """<!DOCTYPE html>
 <html lang="en">
-<head><title>Definitions</title></head>
+<head>
+<title>Definitions</title>
+<style>
+pre {
+white-space: pre-wrap;
+}
+</style>
+</head>
 <body>
 <form action="term" method="POST">
 <input placeholder="term" name="term" autofocus><br><br>
