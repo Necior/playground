@@ -47,7 +47,13 @@ def view_terms():
     for term, definitions in groupby(
         sorted(
             repo.get_all(),
-            key=lambda d: (d.term.lower(), d.term, d.description),
+            key=lambda d: (
+                # Let's put terms starting with "_" (like "_meta") first.
+                not d.term.startswith("_"),
+                d.term.lower(),
+                d.term,
+                d.description,
+            ),
         ),
         key=lambda d: d.term,
     ):
