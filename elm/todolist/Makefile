@@ -1,3 +1,5 @@
+version := $(shell cat VERSION)
+
 index.html: src/Main.elm
 	elm make src/Main.elm
 
@@ -10,6 +12,6 @@ develop:
 	elm reactor
 
 .PHONY:
-publish-dev-docker-image: index.html Dockerfile
-	docker buildx build --platform linux/arm64,linux/amd64 -t necior/elm-playground:dev --push .
+publish-docker-image: index.html Dockerfile VERSION
+	docker buildx build --platform linux/arm64,linux/amd64 -t necior/elm-playground:$(version) --push .
 
