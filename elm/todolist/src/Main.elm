@@ -136,7 +136,7 @@ view model =
             , button [ onClick Save ] [ text "Save" ]
             ]
                 ++ viewTodos model
-                ++ [ h3 [] [ text "serialized" ]
+                ++ [ h3 [] [ text "Serialized" ]
                    , pre [] [ text (E.encode 2 (encode model)) ]
                    ]
     in
