@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
+import File.Download as Download
 import Html exposing (Attribute, Html, button, del, h1, h2, h3, input, li, pre, small, text, ul)
 import Html.Attributes exposing (autofocus, value)
 import Html.Events exposing (keyCode, on, onClick, onInput, onMouseOut, onMouseOver)
@@ -65,6 +66,7 @@ type Msg
     | LinkClicked Browser.UrlRequest
     | MouseOver Todo
     | MouseOut
+    | Save
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -102,6 +104,14 @@ update msg model =
         MouseOut ->
             ( { model | hovered = Nothing }, Cmd.none )
 
+        Save ->
+            ( model
+            , Download.string
+                "simple-todo-app-save.json"
+                "application/json"
+                (E.encode 0 (encode model))
+            )
+
 
 
 -- SUBSCRIPTIONS
@@ -123,6 +133,7 @@ view model =
             [ h1 [] [ text "Simple Todo App" ]
             , input [ autofocus True, onInput MessageChanged, value model.currentTodo, onEnter AddTodo ] []
             , button [ onClick AddTodo ] [ text "Add todo" ]
+            , button [ onClick Save ] [ text "Save" ]
             ]
                 ++ viewTodos model
                 ++ [ h3 [] [ text "serialized" ]
