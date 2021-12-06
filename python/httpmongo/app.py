@@ -81,7 +81,7 @@ white-space: pre-wrap;
 </style>
 </head>
 <body>
-<form action="term" method="POST">
+<form action="/" method="POST">
 <input placeholder="term" name="term" autofocus><br><br>
 <textarea placeholder="description" name="description"></textarea><br><br>
 <button>add definition</button>
@@ -92,11 +92,11 @@ white-space: pre-wrap;
     )
 
 
-@app.route("/term", methods=["POST"])
+@app.route("/", methods=["POST"])
 def insert_one():
     repo.insert(
         Definition(
             request.form["term"].strip(), request.form["description"].strip()
         )
     )
-    return redirect("/")
+    return form()
