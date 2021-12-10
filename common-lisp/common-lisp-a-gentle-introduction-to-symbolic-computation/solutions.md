@@ -189,3 +189,12 @@ REST -> SECOND
 - Incorrect, `('symbol)` should have no parenthesis.
 - Incorrent, `((t 'not-a-symbol))` has too many parenthesis.
 
+# 4.8
+
+```common-lisp
+(defun emphasize3 (x)
+  (cond ((equal (first x) 'good) (cons 'great (rest x)))
+	((equal (first x) 'bad)  (cons 'awful (rest x)))
+	(t (cons 'very x))))
+```
+
