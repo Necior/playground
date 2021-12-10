@@ -198,3 +198,14 @@ REST -> SECOND
 	(t (cons 'very x))))
 ```
 
+# 4.9
+
+In the original version the order of test-and-consequent clauses was wrong.
+Fixed version:
+
+```common-lisp
+(defun make-odd (x)
+      (cond ((not (oddp x)) (+ x 1))
+            (t x)))
+```
+
