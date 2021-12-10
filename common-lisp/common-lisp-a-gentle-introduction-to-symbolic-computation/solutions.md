@@ -231,3 +231,12 @@ Using nested `IF`s:
       x)))
 ```
 
+# 4.11
+
+```common-lisp
+(defun firstzero (l)
+  (cond ((equal 0 (first l)) 'first)
+        ((equal 0 (second l)) 'second)
+        ((equal 0 (third l)) 'third)
+        (t 'none)))
+```
