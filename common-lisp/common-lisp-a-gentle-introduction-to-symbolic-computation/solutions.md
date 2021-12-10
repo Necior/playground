@@ -182,3 +182,10 @@ REST -> SECOND
 (defun my-abs (x) (cond ((< x 0) (- x)) (t x)))
 ```
 
+# 4.7
+
+- Incorrect, `(symbolp x)` is not a correct clause.
+- Correct.
+- Incorrect, `('symbol)` should have no parenthesis.
+- Incorrent, `((t 'not-a-symbol))` has too many parenthesis.
+
