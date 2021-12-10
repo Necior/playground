@@ -209,3 +209,25 @@ Fixed version:
             (t x)))
 ```
 
+# 4.10
+
+Using `COND`:
+
+```common-lisp
+(defun constrain (x max min)
+  (cond ((< x min) min)
+	((> x max) max)
+	(t x)))
+```
+
+Using nested `IF`s:
+
+```common-lisp
+(defun constrain (x max min)
+  (if (< x min)
+    min
+    (if (> x max)
+      max
+      x)))
+```
+
