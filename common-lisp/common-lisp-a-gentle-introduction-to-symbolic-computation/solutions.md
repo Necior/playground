@@ -240,3 +240,12 @@ Using nested `IF`s:
         ((equal 0 (third l)) 'third)
         (t 'none)))
 ```
+
+# 4.12
+
+```common-lisp
+(defun cycle (x)
+  (cond ((equal 99 x) 1)
+	(t (+ 1 x))))
+```
+
