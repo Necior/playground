@@ -82,8 +82,8 @@ white-space: pre-wrap;
 </head>
 <body>
 <form action="/" method="POST">
-<input placeholder="term" name="term" autofocus><br><br>
-<textarea placeholder="description" name="description"></textarea><br><br>
+<input placeholder="term" name="term" size="67" autofocus><br><br>
+<textarea placeholder="description" name="description" cols="80" rows="10"></textarea><br><br>
 <button>add definition</button>
 </form>
 <hr>
