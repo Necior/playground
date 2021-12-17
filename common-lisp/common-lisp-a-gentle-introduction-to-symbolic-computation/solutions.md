@@ -278,3 +278,11 @@ Using nested `IF`s:
         ((and (oddp x) (< x 0)) (* x 2))
         (t (/ x 2))))
 ```
+
+# 4.17
+
+```common-lisp
+(defun check (a b)
+  (or (and (equal b 'child) (or (equal a 'boy) (equal a 'girl)))
+      (and (equal b 'adult) (or (equal a 'man) (equal a 'woman)))))
+```
