@@ -249,3 +249,12 @@ Using nested `IF`s:
 	(t (+ 1 x))))
 ```
 
+# 4.13
+
+```common-lisp
+(defun howcompute (x y z)
+  (cond ((and (equal (+ x y) z) (equal (* x y) z)) 'sum-of-or-product-of)
+        ((equal (+ x y) z) 'sum-of)
+        ((equal (* x y) z) 'product-of)
+        (t '(beats me))))
+```
