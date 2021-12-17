@@ -269,3 +269,12 @@ Using nested `IF`s:
 (defun geq (x y)
   (or (equal x y) (> x y)))
 ```
+
+# 4.16
+
+```common-lisp
+(defun fun (x)
+  (cond ((and (oddp x) (> x 0)) (* x x))
+        ((and (oddp x) (< x 0)) (* x 2))
+        (t (/ x 2))))
+```
