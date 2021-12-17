@@ -263,3 +263,9 @@ Using nested `IF`s:
 
 `foe`, `fee`, `foe`, `nil`, `yes`, `t`
 
+# 4.15
+
+```common-lisp
+(defun geq (x y)
+  (or (equal x y) (> x y)))
+```
