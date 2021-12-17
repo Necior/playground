@@ -258,3 +258,8 @@ Using nested `IF`s:
         ((equal (* x y) z) 'product-of)
         (t '(beats me))))
 ```
+
+# 4.14
+
+`foe`, `fee`, `foe`, `nil`, `yes`, `t`
+
