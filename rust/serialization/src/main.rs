@@ -1,14 +1,25 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use Handedness::*;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 enum Handedness {
     Right,
     Left,
     Other(String),
 }
 
-#[derive(Debug, Serialize)]
+impl std::fmt::Display for Handedness {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let text = match self {
+            Right => "right",
+            Left => "left",
+            Other(o) => o,
+        };
+        write!(fmt, "{}", text)
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 struct Person {
     name: String,
     favorite_numbers: Vec<i32>,
@@ -28,4 +39,13 @@ fn main() {
         println!("# JSON-serialized");
         println!("  {}", serde_json::to_string(&person).unwrap());
     }
+
+    let json =
+        r#"{"name": "Necior", "favorite_numbers": [21, 37], "handedness": {"Other": "both"}}"#;
+    match serde_json::from_str(json) {
+        Ok(Person {
+            name, handedness, ..
+        }) => println!("{} is {}-handed", name, handedness),
+        Err(e) => eprintln!("{}", e),
+    };
 }
