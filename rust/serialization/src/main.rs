@@ -27,7 +27,7 @@ struct Person {
 }
 
 fn main() {
-    let hs: Vec<Handedness> = vec![Right, Left, Other(String::from("both"))];
+    let hs = vec![Right, Left, Other(String::from("both"))];
     for h in hs {
         let person = Person {
             name: String::from("Necior"),
