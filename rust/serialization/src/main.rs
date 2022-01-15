@@ -37,7 +37,10 @@ fn main() {
         println!("# Debug print");
         println!("  {:?}", person);
         println!("# JSON-serialized");
-        println!("  {}", serde_json::to_string(&person).unwrap());
+        println!(
+            "  {}",
+            serde_json::to_string(&person).unwrap_or_else(|_| String::from("failed to serialize"))
+        );
     }
 
     let json =
