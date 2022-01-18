@@ -1,5 +1,9 @@
 use serde::{Deserialize, Serialize};
+use std::fs::File;
+use std::io::prelude::*;
 use Handedness::*;
+
+static DB_FILE: &str = "./person.db";
 
 #[derive(Debug, Deserialize, Serialize)]
 enum Handedness {
@@ -26,7 +30,27 @@ struct Person {
     handedness: Handedness,
 }
 
+fn save_to_file(person: &Person) -> std::io::Result<()> {
+    let mut f = File::create(DB_FILE)?;
+    let serialized = serde_json::to_string_pretty(person).unwrap();
+    f.write_all(serialized.as_bytes())?;
+    Ok(())
+}
+
 fn main() {
+    let p = Person {
+        name: String::from("Adrian"),
+        favorite_numbers: vec![],
+        handedness: Right,
+    };
+    match save_to_file(&p) {
+        Ok(_) => println!("Serialized into a file"),
+        Err(e) => {
+            println!("Serialization failed: {}", e);
+            std::process::exit(1);
+        }
+    };
+
     let hs = vec![Right, Left, Other(String::from("both"))];
     for h in hs {
         let person = Person {
