@@ -37,16 +37,33 @@ fn save_to_file(person: &Person) -> std::io::Result<()> {
     Ok(())
 }
 
+fn load_from_file() -> Result<Person, std::io::Error> {
+    let mut f = File::open(DB_FILE)?;
+    let mut json = String::new();
+    f.read_to_string(&mut json)?;
+
+    Ok(serde_json::from_str(&json).unwrap())
+}
+
 fn main() {
-    let p = Person {
-        name: String::from("Adrian"),
-        favorite_numbers: vec![],
-        handedness: Right,
-    };
-    match save_to_file(&p) {
-        Ok(_) => println!("Serialized into a file"),
+    {
+        let p = Person {
+            name: String::from("Adrian"),
+            favorite_numbers: vec![],
+            handedness: Right,
+        };
+        match save_to_file(&p) {
+            Ok(_) => println!("Serialized into a file"),
+            Err(e) => {
+                println!("Serialization failed: {}", e);
+                std::process::exit(1);
+            }
+        };
+    }
+    match load_from_file() {
+        Ok(p) => println!("Deserialization succeeded:\n  {:?}", p),
         Err(e) => {
-            println!("Serialization failed: {}", e);
+            println!("Deserialization failed: {}", e);
             std::process::exit(1);
         }
     };
