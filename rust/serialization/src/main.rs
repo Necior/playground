@@ -67,29 +67,4 @@ fn main() {
             std::process::exit(1);
         }
     };
-
-    let hs = vec![Right, Left, Other(String::from("both"))];
-    for h in hs {
-        let person = Person {
-            name: String::from("Necior"),
-            favorite_numbers: [21, 37].into(),
-            handedness: h,
-        };
-        println!("# Debug print");
-        println!("  {:?}", person);
-        println!("# JSON-serialized");
-        println!(
-            "  {}",
-            serde_json::to_string(&person).unwrap_or_else(|_| String::from("failed to serialize"))
-        );
-    }
-
-    let json =
-        r#"{"name": "Necior", "favorite_numbers": [21, 37], "handedness": {"Other": "both"}}"#;
-    match serde_json::from_str(json) {
-        Ok(Person {
-            name, handedness, ..
-        }) => println!("{} is {}-handed", name, handedness),
-        Err(e) => eprintln!("{}", e),
-    };
 }
