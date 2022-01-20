@@ -46,25 +46,72 @@ fn load_from_file() -> Result<Person, std::io::Error> {
 }
 
 fn main() {
-    {
-        let p = Person {
-            name: String::from("Adrian"),
-            favorite_numbers: vec![],
-            handedness: Right,
-        };
-        match save_to_file(&p) {
-            Ok(_) => println!("Serialized into a file"),
+    use Command::*;
+
+    #[derive(Debug)]
+    enum Command {
+        Save,
+        Load,
+        Exit,
+        Invalid,
+        // TODO: add a `Help` command
+    }
+
+    impl Command {
+        fn from_str(s: &str) -> Self {
+            match s {
+                "save" => Save,
+                "load" => Load,
+                "exit" => Exit,
+                _ => Invalid,
+            }
+        }
+    }
+
+    let p = Person {
+        name: String::from("Necior"),
+        favorite_numbers: vec![],
+        handedness: Right,
+    };
+
+    loop {
+        let mut input = String::with_capacity(8);
+        match std::io::stdin().read_line(&mut input) {
+            Ok(_) => {
+                let raw_cmd = input.trim(); // TODO: to lower
+                let cmd = Command::from_str(raw_cmd);
+
+                match cmd {
+                    Command::Save => {
+                        match save_to_file(&p) {
+                            Ok(_) => println!("Serialized into a file"),
+                            Err(e) => {
+                                println!("Serialization failed: {}", e);
+                                std::process::exit(1);
+                            }
+                        };
+                    }
+                    Command::Load => {
+                        match load_from_file() {
+                            Ok(p) => println!("Deserialization succeeded:\n  {:?}", p),
+                            Err(e) => {
+                                println!("Deserialization failed: {}", e);
+                                std::process::exit(1);
+                            }
+                        };
+                    }
+                    Command::Exit => {
+                        std::process::exit(0);
+                    }
+                    Command::Invalid => {
+                        println!("Invalid command");
+                    }
+                };
+            }
             Err(e) => {
-                println!("Serialization failed: {}", e);
-                std::process::exit(1);
+                println!("{}", e);
+                break;
             }
         };
     }
-    match load_from_file() {
-        Ok(p) => println!("Deserialization succeeded:\n  {:?}", p),
-        Err(e) => {
-            println!("Deserialization failed: {}", e);
-            std::process::exit(1);
-        }
-    };
 }
