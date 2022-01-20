@@ -32,7 +32,7 @@ struct Person {
 
 fn save_to_file(person: &Person) -> std::io::Result<()> {
     let mut f = File::create(DB_FILE)?;
-    let serialized = serde_json::to_string_pretty(person).unwrap();
+    let serialized = serde_json::to_string_pretty(person)?;
     f.write_all(serialized.as_bytes())?;
     Ok(())
 }
