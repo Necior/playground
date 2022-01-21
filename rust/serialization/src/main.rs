@@ -1,33 +1,13 @@
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::prelude::*;
-use Handedness::*;
 
 static DB_FILE: &str = "./person.db";
-
-#[derive(Debug, Deserialize, Serialize)]
-enum Handedness {
-    Right,
-    Left,
-    Other(String),
-}
-
-impl std::fmt::Display for Handedness {
-    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let text = match self {
-            Right => "right",
-            Left => "left",
-            Other(o) => o,
-        };
-        write!(fmt, "{}", text)
-    }
-}
 
 #[derive(Debug, Deserialize, Serialize)]
 struct Person {
     name: String,
     favorite_numbers: Vec<i32>,
-    handedness: Handedness,
 }
 
 fn save_to_file(person: &Person) -> std::io::Result<()> {
