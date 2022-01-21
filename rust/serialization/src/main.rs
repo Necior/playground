@@ -10,10 +10,26 @@ enum Exercise {
     Swimming,
 }
 
+impl Exercise {
+    fn from_str(s: &str) -> Option<Self> {
+        match s {
+            "running" => Some(Self::Running),
+            "swimming" => Some(Self::Swimming),
+            _ => None,
+        }
+    }
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 struct Person {
     name: String,
     latest_workout: Vec<Exercise>,
+}
+
+impl Person {
+    fn append_exercise(&mut self, e: Exercise) {
+        self.latest_workout.push(e);
+    }
 }
 
 fn save_to_file(person: &Person) -> std::io::Result<()> {
@@ -39,6 +55,7 @@ fn main() {
         Save,
         Load,
         Print,
+        Add(Exercise),
         Exit,
         Invalid,
         // TODO: add a `Help` command
@@ -46,12 +63,24 @@ fn main() {
 
     impl Command {
         fn from_str(s: &str) -> Self {
-            match s {
-                "save" => Save,
-                "load" => Load,
-                "print" => Print,
-                "exit" => Exit,
-                _ => Invalid,
+            let mut tokens = s.split_ascii_whitespace();
+            if let Some(s) = tokens.next() {
+                match s {
+                    "save" => Save,
+                    "load" => Load,
+                    "print" => Print,
+                    "add" => {
+                        if let Some(e) = Exercise::from_str(tokens.next().unwrap_or("")) {
+                            Add(e)
+                        } else {
+                            Invalid
+                        }
+                    }
+                    "exit" => Exit,
+                    _ => Invalid,
+                }
+            } else {
+                Invalid
             }
         }
     }
@@ -96,6 +125,10 @@ fn main() {
                     Command::Print => match person {
                         Some(ref p) => println!("{:?}", p),
                         None => println!("Please load data before trying to print it."),
+                    },
+                    Command::Add(e) => match person {
+                        Some(ref mut p) => p.append_exercise(e),
+                        None => println!("Nope. Load data, dude."),
                     },
                     Command::Exit => {
                         std::process::exit(0);
