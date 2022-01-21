@@ -68,11 +68,7 @@ fn main() {
         }
     }
 
-    let p = Person {
-        name: String::from("Necior"),
-        favorite_numbers: vec![],
-        handedness: Right,
-    };
+    let mut person: Option<Person> = None;
 
     loop {
         let mut input = String::with_capacity(8);
@@ -83,17 +79,26 @@ fn main() {
 
                 match cmd {
                     Command::Save => {
-                        match save_to_file(&p) {
-                            Ok(_) => println!("Serialized into a file"),
-                            Err(e) => {
-                                println!("Serialization failed: {}", e);
-                                std::process::exit(1);
+                        match person {
+                            Some(ref p) => {
+                                match save_to_file(p) {
+                                    Ok(_) => println!("Serialized into a file"),
+                                    Err(e) => {
+                                        println!("Serialization failed: {}", e);
+                                        std::process::exit(1);
+                                    }
+                                };
+                            }
+                            None => {
+                                println!("Please load data first.");
                             }
                         };
                     }
                     Command::Load => {
                         match load_from_file() {
-                            Ok(p) => println!("Deserialization succeeded:\n  {:?}", p),
+                            Ok(p) => {
+                                person = Some(p);
+                            }
                             Err(e) => {
                                 println!("Deserialization failed: {}", e);
                                 std::process::exit(1);
