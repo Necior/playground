@@ -52,6 +52,7 @@ fn main() {
     enum Command {
         Save,
         Load,
+        Print,
         Exit,
         Invalid,
         // TODO: add a `Help` command
@@ -62,6 +63,7 @@ fn main() {
             match s {
                 "save" => Save,
                 "load" => Load,
+                "print" => Print,
                 "exit" => Exit,
                 _ => Invalid,
             }
@@ -105,6 +107,10 @@ fn main() {
                             }
                         };
                     }
+                    Command::Print => match person {
+                        Some(ref p) => println!("{:?}", p),
+                        None => println!("Please load data before trying to print it."),
+                    },
                     Command::Exit => {
                         std::process::exit(0);
                     }
