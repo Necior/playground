@@ -7,7 +7,6 @@ static DB_FILE: &str = "./person.db";
 #[derive(Debug, Deserialize, Serialize)]
 struct Person {
     name: String,
-    favorite_numbers: Vec<i32>,
 }
 
 fn save_to_file(person: &Person) -> std::io::Result<()> {
