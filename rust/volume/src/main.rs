@@ -1,4 +1,4 @@
-fn generate_values(min: i128, step: i128, max: i128) -> Vec<i128> {
+fn generate_values(min: u16, step: u16, max: u16) -> Vec<u16> {
     let mut v = vec![min];
     let mut current = min;
     loop {
@@ -13,13 +13,13 @@ fn generate_values(min: i128, step: i128, max: i128) -> Vec<i128> {
 
 #[derive(Debug, PartialEq, Eq)]
 struct Variant {
-    mass: i128,
-    sets: i128,
-    reps: i128,
+    mass: u16,
+    sets: u16,
+    reps: u16,
 }
 
 impl Variant {
-    fn volume(&self) -> i128 {
+    fn volume(&self) -> u16 {
         self.mass * self.sets * self.reps
     }
 }
