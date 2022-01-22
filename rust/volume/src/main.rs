@@ -37,7 +37,7 @@ impl PartialOrd for Variant {
 }
 
 fn main() {
-    let available_mass = generate_values(20, 5, 80);
+    let available_mass = generate_values(20, 5, 120);
     let available_sets = generate_values(3, 1, 4);
     let available_reps = generate_values(5, 1, 8);
 
