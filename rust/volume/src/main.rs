@@ -2,7 +2,7 @@ fn generate_values(min: u16, step: u16, max: u16) -> Vec<u16> {
     let mut v = vec![min];
     let mut current = min;
     loop {
-        current = current + step;
+        current += step;
         if current > max {
             break;
         }
