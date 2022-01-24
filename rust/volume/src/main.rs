@@ -11,7 +11,7 @@ fn generate_values(min: u16, step: u16, max: u16) -> Vec<u16> {
     v
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(PartialEq, Eq)]
 struct Variant {
     mass: u16,
     sets: u16,
@@ -21,6 +21,12 @@ struct Variant {
 impl Variant {
     fn volume(&self) -> u16 {
         self.mass * self.sets * self.reps
+    }
+}
+
+impl std::fmt::Debug for Variant {
+    fn fmt(&self, fmt: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        write!(fmt, "{}x{} @ {:3} kg", self.sets, self.reps, self.mass)
     }
 }
 
