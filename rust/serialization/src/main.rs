@@ -7,6 +7,7 @@ static DB_FILE: &str = "./person.db";
 #[derive(Debug, Deserialize, Serialize)]
 enum Exercise {
     Running,
+    Stretching,
     Swimming,
 }
 
@@ -14,6 +15,7 @@ impl Exercise {
     fn from_str(s: &str) -> Option<Self> {
         match s {
             "running" => Some(Self::Running),
+            "stretching" => Some(Self::Stretching),
             "swimming" => Some(Self::Swimming),
             _ => None,
         }
