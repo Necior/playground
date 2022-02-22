@@ -9,7 +9,7 @@ last element of the last row (mat[i][0] > mat[i - 1][-1]), search for a
 specific value in the matrix and return whether it exists.
 """
 
-from typing import List, Optional
+from typing import List
 
 
 def search_matrix(matrix: List[List[int]], value: int) -> bool:
