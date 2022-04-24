@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+<pre>
+    Hi, {{ username }}.
+    <a href="{{ url_for('logout') }}">Log out</a>
+</pre>
+<img width="128px" src="{{ avatar_url }}" alt="Avatar of user {{ username }}."/>
+{% endblock %}
