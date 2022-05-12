@@ -4,7 +4,7 @@ from typing import List
 
 def extract_numbers(raw: str) -> List[List[int]]:
     lines = raw.strip().split("\n")
-    lines = [l.replace(",", "") for l in lines]
+    lines = [l.replace(",", "").replace(".", "") for l in lines]
     regex = re.compile(r"([0-9]+)[^0-9]")
 
     def get_numbers(line: str) -> List[int]:
