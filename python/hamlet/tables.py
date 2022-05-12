@@ -1,7 +1,9 @@
-from typing import Tuple, List
+from typing import Tuple, List, Type
+
+BuildingTable = List[Tuple[int, int, int, int, int, int, int]]
 
 # src: https://help.tribalwars.net/wiki/Village_Headquarters
-village_headquarters: List[Tuple[int, int, int, int, int, int, int]] = [
+village_headquarters: BuildingTable = [
     # level, wood, clay, iron, pop needed, pop total, speed factor [%]
     (1, 90, 80, 70, 5, 5, 95),
     (2, 113, 102, 88, 1, 6, 91),
@@ -36,7 +38,7 @@ village_headquarters: List[Tuple[int, int, int, int, int, int, int]] = [
 ]
 
 # src: https://help.tribalwars.net/wiki/Barracks
-barracks: List[Tuple[int, int, int, int, int, int, int]] = [
+barracks: BuildingTable = [
     (1, 200, 170, 90, 7, 7, 63),
     (2, 252, 218, 113, 1, 8, 59),
     (3, 318, 279, 143, 2, 10, 56),
@@ -65,7 +67,7 @@ barracks: List[Tuple[int, int, int, int, int, int, int]] = [
 ]
 
 # src: https://help.tribalwars.net/wiki/Stable
-stable: List[Tuple[int, int, int, int, int, int, int]] = [
+stable: BuildingTable = [
     (1, 270, 240, 260, 8, 8, 63),
     (2, 340, 307, 328, 1, 9, 59),
     (3, 429, 393, 413, 2, 11, 56),
