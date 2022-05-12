@@ -1,0 +1,126 @@
+\documentclass[12pt, a4paper, twocolumn]{article}
+\usepackage{abstract}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\newcommand{\hamlet}{\textit{hamlet}}
+\title{\hamlet: a simplified model of the Tribalwars game}
+\author{Adrian Sadłocha}
+\date{????-??-??}
+
+\newcommand{\abstractText}{
+Tribalwars is an online browser game in which players build their own villages.
+In this paper I propose a simplified graph model of the game, which I call \hamlet.
+Our goal is to find "the best" gameplay, or the shortest path between an initial state and a target state.
+
+An heuristic-based graph traversal algorithm is proposed, implemented and evaluated.
+
+Finally, I present the results of using a \hamlet gameplay in real Tribalwars game.
+}
+
+\begin{document}
+
+\twocolumn[
+  \begin{@twocolumnfalse}
+    \maketitle
+    \begin{abstract}
+      \abstractText
+      \newline
+      \newline
+    \end{abstract}
+  \end{@twocolumnfalse}
+]
+
+\section{Initial model}
+
+The Tribalwars game has a complex set of rules.
+Some of the rules differ between localized versions of the game or between worlds.
+
+In this section I propose a simplified model of the game.
+The main idea is to use graph vertices to represent game states and use (directed) edges to represent player actions.
+This way we can treat graph paths as possible gameplays.
+
+\subsection{Game model}
+
+For starters, let's consider a simplified model of the game.
+
+Let:
+
+\begin{equation*}
+  \begin{aligned}
+    G &= (t, R, L)\\
+      &= (t, (R_w, R_c, R_i), (tc, cp, im)),
+  \end{aligned}
+\end{equation*}
+
+where:
+
+\begin{itemize}
+\item \(G\) - the game state,
+\item \(t\) - time since the beginning of the game,
+\item \(R\) - available resources,
+\item \(L\) - building levels,
+\item \(R_w\) - available resources: wood,
+\item \(R_c\) - available resources: clay,
+\item \(R_i\) - available resources: iron,
+\item \(tc\) - level of a timber camp,
+\item \(cp\) - level of a clay pit,
+\item \(im\) - level of an iron mine.
+\end{itemize}
+
+\(R_w, R_c, R_i, tc, cp, im\) are non-negative integers.
+Moreover, we've got the following constraints on the building levels:
+
+\begin{equation*}
+\begin{aligned}
+  1 &\leq tc \leq 30 &= TC \\
+  1 &\leq cp \leq 30 &= CP \\
+  1 &\leq im \leq 30 &= IM.
+\end{aligned}
+\end{equation*}
+
+\subsection{Game state}
+
+The most prevalent game state is the initial state \(S = (0, (0, 0, 0), (1, 1, 1))\),
+i.e.\ a state in which there are no available resources and all buildings are at their minimum levels.
+
+\subsection{Gameplay}
+
+Gameplay is a finite sequence of transitions which starts in the initial state.
+
+A \textit{successful} gameplay finishes in the target state \(T = (t, R, (TC, CP, IM))\),
+i.e.\ a state in which all the buildings are at the maximum level.
+
+The most desired gameplays are those which are successful and minimize gamplay time \(t\).
+
+\subsection{Transition}
+
+A missing definition is a transition definition.
+
+In order to achieve the target state, we have to perform a (finite, unknown) number of transitions.
+
+Informally, a transition in our game model corresponds to an action in the game.
+
+For example, we can upgrade our timber camp from level 1 to level 2.
+Such a transition is an edge between game states \(G_1\) and \(G_2\).
+
+\subsubsection{Possible transitions}
+In general, there are 4 possible transitions in \hamlet:
+
+\begin{itemize}
+  \item wait \(n \in \mathbb{N}^+\) hours,
+  \item upgrade a timber camp,
+  \item upgrade a clay pit,
+  \item upgrade an iron mine.
+\end{itemize}
+
+Waiting is a way to get more resources.
+An exact amount of new resources depends on building levels and waiting time.
+
+Upgrading changes a building level from \(i\) to \(i + 1\).
+Each upgrade has a specified cost in resources.
+When a building reaches its maximum level (e.g. \(TC\) for a timber camp), it can no longer be upgraded.
+
+% TODO: define `next(G, T)`, define `cost(T)`.
+% TODO: provide an example (upgrading timber camp from level 1 to level 2 costs (63, 77, 50).
+
+\end{document}
